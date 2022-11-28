@@ -2,20 +2,22 @@ package com.kh.devs_server.entity;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 import javax.persistence.*;
 
 @Entity
-@Table( name = "hashtag")
-@Getter @Setter @ToString
-public class Hashtag {
+@Getter
+@Setter
+public class StudyHashtag {
     @Id
-    @Column(name = "hashtag_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @ManyToOne
+    @JoinColumn(name = "study_id")
+    private Study study;
 
-    @Column(nullable = false, unique = true)
-    private String tag;
+    @ManyToOne
+    @JoinColumn(name = "hashtag_id")
+    private Hashtag hashtag;
 }
