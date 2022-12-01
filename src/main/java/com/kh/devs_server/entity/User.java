@@ -1,18 +1,19 @@
 package com.kh.devs_server.entity;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "user")
-@Data
+@Entity @Table(name = "user") @Getter @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User {
     @Id
     @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    @Column(nullable = false, unique = true)
+    private String email;
 
     @Column(nullable = false)
     private String name;
@@ -20,9 +21,10 @@ public class User {
     @Column(name = "password", nullable = false)
     private String pwd;
 
-    @Column(nullable = false, unique = true)
-    private String email;
+    private String phone;
 
     private LocalDateTime regDate;
+    private LocalDateTime updateDate;
+
 
 }

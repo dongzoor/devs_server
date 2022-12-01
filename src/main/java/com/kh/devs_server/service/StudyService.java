@@ -1,13 +1,17 @@
 package com.kh.devs_server.service;
 
+import com.kh.devs_server.dao.CartStudyRepository;
 import com.kh.devs_server.dao.StudyRepository;
+import com.kh.devs_server.dao.UserRepository;
 import com.kh.devs_server.dto.StudyDTO;
+import com.kh.devs_server.entity.CartStudy;
 import com.kh.devs_server.entity.Study;
 import com.kh.devs_server.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,36 +20,50 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class StudyService {
-
     private final StudyRepository studyRepository;
+    private final UserService userService;
 
+    public Boolean writeStudy(Long userId, StudyDTO studyDTO) {
 
-    public Study saveStudy(Study study) {
-        return studyRepository.save(study);
-    }
+        User user = userService.findById(userId);
 
-    public boolean regStudy(String title, String content, User user) {
-        Study study = new Study();
-        study.setUser(user);
-        study.setTitle(title);
-        study.setContent(content);
+//        Study study = new Study();
+//        study.setTitle(studyDTO.getTitle());
+//        study.setContent(studyDTO.getContent());
+//        study.setRegTime(LocalDateTime.now());
+//        study.setGoalTime(LocalDateTime.now());
+//        study.setCnt(0);
+//        study.setWriter(user.getName());
+//
+        Study study = Study.builder()
+                .title(studyDTO.getTitle())
+                .content(studyDTO.getContent())
+                .regTime(LocalDateTime.now())
+                .goalTime(LocalDateTime.now())
+                .cnt(0)
+                .writer(user.getName())
+                .build();
         Study rst = studyRepository.save(study);
+        log.warn(rst.toString());
         return true;
     }
-
-    public List<StudyDTO> getStudyList(){
-        List<StudyDTO> studyDTOS = new ArrayList<>();
-        List<Study> studyList = studyRepository.findAll();
-        for(Study e: studyList) {
-            StudyDTO studyDTO = new StudyDTO();
-            studyDTO.setName(e.getUser().getName());
-            studyDTO.setTitle(e.getTitle());
-            studyDTO.setContent(e.getContent());
-            studyDTO.setRegTime(LocalDateTime.now());
-            studyDTOS.add(studyDTO);
-        }
-        return studyDTOS;
+    public List<Study> getStudyList() {
+        return studyRepository.findAll();
     }
+
+//    public List<StudyDTO> getStudyList(){
+//        List<StudyDTO> studyDTOS = new ArrayList<>();
+//        List<Study> studyList = studyRepository.findAll();
+//        for(Study e: studyList) {
+//            StudyDTO studyDTO = new StudyDTO();
+//            studyDTO.setName(e.getUser().getName());
+//            studyDTO.setTitle(e.getTitle());
+//            studyDTO.setContent(e.getContent());
+//            studyDTO.setRegTime(LocalDateTime.now());
+//            studyDTOS.add(studyDTO);
+//        }
+//        return studyDTOS;
+//    }
 
     public StudyDTO getStudy(Long id) {
         StudyDTO studyDTO = new StudyDTO();
@@ -58,4 +76,5 @@ public class StudyService {
 
         return studyDTO;
     }
+
 }
