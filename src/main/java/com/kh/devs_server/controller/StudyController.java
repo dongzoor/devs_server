@@ -17,6 +17,7 @@ import java.util.Optional;
 @RestController
 @RequiredArgsConstructor
 public class StudyController {
+
     private final StudyService studyService;
     private final StudyRepository studyRepository;
 
@@ -34,7 +35,7 @@ public class StudyController {
 
     @PostMapping("/study/write")
     public ResponseEntity<StudyDTO> writeStudy(@RequestBody StudyDTO studyDTO) {
-        //로그인 파트에서 세션으로 주면 받아올 예정
+//        로그인 파트에서 세션으로 주면 받아올 예정
         boolean result = studyService.writeStudy(studyDTO);
 
         if(result){
@@ -43,6 +44,7 @@ public class StudyController {
         else {
             return new ResponseEntity(false, HttpStatus.BAD_REQUEST);
         }
+
     }
     @DeleteMapping("study/{studyId}")
     public void deleteStudy(@PathVariable Long studyId) {

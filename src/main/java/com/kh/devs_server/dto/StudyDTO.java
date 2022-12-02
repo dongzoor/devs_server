@@ -11,11 +11,11 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class StudyDTO {
-    private Long userId;
-    private String name;
+    private String writer;
     private String title;
     private String content;
     private LocalDateTime regTime;
+    private String imgUrl;
     private int readCount;
     private boolean studyApply;
     private int studyApplyCount;

@@ -1,6 +1,7 @@
 package com.kh.devs_server.service;
 
 import com.kh.devs_server.dao.StudyRepository;
+import com.kh.devs_server.dao.UserRepository;
 import com.kh.devs_server.dto.StudyDTO;
 import com.kh.devs_server.entity.Study;
 import com.kh.devs_server.entity.User;
@@ -18,18 +19,16 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class StudyService {
     private final StudyRepository studyRepository;
-    private final UserService userService;
 
     public Boolean writeStudy(StudyDTO studyDTO) {
-
-        User user = userService.findById(studyDTO.getUserId());
         Study study = Study.builder()
                 .title(studyDTO.getTitle())
                 .content(studyDTO.getContent())
                 .regTime(LocalDateTime.now())
                 .goalTime(LocalDateTime.now())
                 .cnt(0)
-                .writer(user.getName())
+                .writer(studyDTO.getWriter())
+                .imgUrl(studyDTO.getImgUrl())
                 .build();
         Study rst = studyRepository.save(study);
         log.warn(rst.toString());
@@ -58,6 +57,19 @@ public class StudyService {
 //        return studyDTOS;
 //    }
 
-
+//    public StudyDTO getStudy(Long id) {
+//        StudyDTO studyDTO = new StudyDTO();
+//        Study study = studyRepository.findById(id).orElse(null);
+//        assert study != null;
+//        studyDTO.setName(study.getUser().getName());
+//        studyDTO.setTitle(study.getTitle());
+//        studyDTO.setContent(study.getContent());
+//        studyDTO.setRegTime(LocalDateTime.now());
+//
+//        return studyDTO;
+//    }
 
 }
+
+
+
