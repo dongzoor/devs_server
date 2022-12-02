@@ -1,20 +1,17 @@
 package com.kh.devs_server.service;
 
-import com.kh.devs_server.dao.CartStudyRepository;
 import com.kh.devs_server.dao.StudyRepository;
-import com.kh.devs_server.dao.UserRepository;
 import com.kh.devs_server.dto.StudyDTO;
-import com.kh.devs_server.entity.CartStudy;
 import com.kh.devs_server.entity.Study;
 import com.kh.devs_server.entity.User;
+import com.kh.devs_server.exception.NotFoundStudyException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -51,6 +48,7 @@ public class StudyService {
 //        return studyRepository.findAll();
 //    }
 //
+
 //    public List<StudyDTO> getStudyList(){
 //        List<StudyDTO> studyDTOS = new ArrayList<>();
 //        List<Study> studyList = studyRepository.findAll();

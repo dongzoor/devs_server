@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class StudyDTO {
+    private Long userId;
     private String name;
     private String title;
     private String content;

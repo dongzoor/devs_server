@@ -10,13 +10,14 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/studies")
 @RequiredArgsConstructor
 public class StudyController {
+
 //    private final StudyService studyService;
 //    private final StudyRepository studyRepository;
 //
@@ -48,4 +49,5 @@ public class StudyController {
 //    public void deleteStudy(@PathVariable Long studyId) {
 //        studyRepository.deleteById(studyId);
 //    }
+
 }
