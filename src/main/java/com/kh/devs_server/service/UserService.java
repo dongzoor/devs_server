@@ -45,9 +45,9 @@ public class UserService {
 
     // 로그인 체크
     public List<User> loginCheck(String userEmail, String password) {
-        List<User> memberList = userRepository.findByUserEmailAndPassword(userEmail, password);
+        List<User> userList = userRepository.findByUserEmailAndPassword(userEmail, password);
 
-        return memberList;
+        return userList;
     }
 
     //회원정보 수정
