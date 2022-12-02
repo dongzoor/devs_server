@@ -28,6 +28,7 @@ public class Study {
     private String content;
 
     private int cnt; //조회수
+    private String imgUrl;
 
     private LocalDateTime regTime;   // 생성일
     private LocalDateTime updateTime; // 수정일
@@ -47,12 +48,13 @@ public class Study {
 //        this.user = user;
 //    }
     @Builder
-    public Study(Long id, String title, String content, String writer, int cnt, LocalDateTime regTime,
+    public Study(Long id, String title, String content, String writer, String imgUrl, int cnt, LocalDateTime regTime,
                  LocalDateTime updateTime, LocalDateTime goalTime, String coordinate) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.writer = writer;
+        this.imgUrl = imgUrl;
         this.cnt = cnt;
         this.regTime = regTime;
         this.updateTime = updateTime;

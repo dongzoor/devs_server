@@ -10,32 +10,32 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/studies")
 @RequiredArgsConstructor
 public class StudyController {
     private final StudyService studyService;
     private final StudyRepository studyRepository;
 
-    @GetMapping("")
+    @GetMapping("/studies")
     public ResponseEntity<List<Study>> studyList(){
         List<Study> list = studyService.getStudyList();
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
-    @GetMapping("/{studyId}")
-    public ResponseEntity<StudyDTO> study(@PathVariable Long studyId) {
-        StudyDTO studyDTO = studyService.getStudy(studyId);
-        return new ResponseEntity(studyDTO, HttpStatus.OK);
+    @GetMapping("/study/{studyId}")
+    public ResponseEntity<Study> study(@PathVariable Long studyId) {
+        Optional<Study> study = studyService.getStudy(studyId);
+        return new ResponseEntity(study, HttpStatus.OK);
     }
 
-    @PostMapping("/{userId}")
-    public ResponseEntity<StudyDTO> writeStudy(@PathVariable Long userId, @RequestBody StudyDTO studyDTO) {
+    @PostMapping("/study/write")
+    public ResponseEntity<StudyDTO> writeStudy(@RequestBody StudyDTO studyDTO) {
         //로그인 파트에서 세션으로 주면 받아올 예정
-        boolean result = studyService.writeStudy(userId, studyDTO);
+        boolean result = studyService.writeStudy(studyDTO);
 
         if(result){
             return new ResponseEntity(true, HttpStatus.OK);
@@ -44,7 +44,7 @@ public class StudyController {
             return new ResponseEntity(false, HttpStatus.BAD_REQUEST);
         }
     }
-    @DeleteMapping("/{studyId}")
+    @DeleteMapping("study/{studyId}")
     public void deleteStudy(@PathVariable Long studyId) {
         studyRepository.deleteById(studyId);
     }

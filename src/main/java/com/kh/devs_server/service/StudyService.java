@@ -1,20 +1,17 @@
 package com.kh.devs_server.service;
 
-import com.kh.devs_server.dao.CartStudyRepository;
 import com.kh.devs_server.dao.StudyRepository;
-import com.kh.devs_server.dao.UserRepository;
 import com.kh.devs_server.dto.StudyDTO;
-import com.kh.devs_server.entity.CartStudy;
 import com.kh.devs_server.entity.Study;
 import com.kh.devs_server.entity.User;
+import com.kh.devs_server.exception.NotFoundStudyException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -23,18 +20,9 @@ public class StudyService {
     private final StudyRepository studyRepository;
     private final UserService userService;
 
-    public Boolean writeStudy(Long userId, StudyDTO studyDTO) {
+    public Boolean writeStudy(StudyDTO studyDTO) {
 
-        User user = userService.findById(userId);
-
-//        Study study = new Study();
-//        study.setTitle(studyDTO.getTitle());
-//        study.setContent(studyDTO.getContent());
-//        study.setRegTime(LocalDateTime.now());
-//        study.setGoalTime(LocalDateTime.now());
-//        study.setCnt(0);
-//        study.setWriter(user.getName());
-//
+        User user = userService.findById(studyDTO.getUserId());
         Study study = Study.builder()
                 .title(studyDTO.getTitle())
                 .content(studyDTO.getContent())
@@ -51,6 +39,11 @@ public class StudyService {
         return studyRepository.findAll();
     }
 
+    public Optional<Study> getStudy(Long id) {
+        Study study = studyRepository.findById(id).orElseThrow(() -> new NotFoundStudyException("study is not Found!"));
+        return Optional.ofNullable(study);
+    }
+
 //    public List<StudyDTO> getStudyList(){
 //        List<StudyDTO> studyDTOS = new ArrayList<>();
 //        List<Study> studyList = studyRepository.findAll();
@@ -65,16 +58,6 @@ public class StudyService {
 //        return studyDTOS;
 //    }
 
-    public StudyDTO getStudy(Long id) {
-        StudyDTO studyDTO = new StudyDTO();
-        Study study = studyRepository.findById(id).orElse(null);
-        assert study != null;
-        studyDTO.setName(study.getUser().getName());
-        studyDTO.setTitle(study.getTitle());
-        studyDTO.setContent(study.getContent());
-        studyDTO.setRegTime(LocalDateTime.now());
 
-        return studyDTO;
-    }
 
 }
