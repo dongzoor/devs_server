@@ -23,10 +23,10 @@ public class StudyService {
     private final StudyRepository studyRepository;
     private final UserService userService;
 
-    public Boolean writeStudy(Long userId, StudyDTO studyDTO) {
+//    public Boolean writeStudy(Long userId, StudyDTO studyDTO) {
 
-        User user = userService.findById(userId);
-
+//        User user = userService.findById(userId);
+//
 //        Study study = new Study();
 //        study.setTitle(studyDTO.getTitle());
 //        study.setContent(studyDTO.getContent());
@@ -35,22 +35,22 @@ public class StudyService {
 //        study.setCnt(0);
 //        study.setWriter(user.getName());
 //
-        Study study = Study.builder()
-                .title(studyDTO.getTitle())
-                .content(studyDTO.getContent())
-                .regTime(LocalDateTime.now())
-                .goalTime(LocalDateTime.now())
-                .cnt(0)
-                .writer(user.getName())
-                .build();
-        Study rst = studyRepository.save(study);
-        log.warn(rst.toString());
-        return true;
-    }
-    public List<Study> getStudyList() {
-        return studyRepository.findAll();
-    }
-
+//        Study study = Study.builder()
+//                .title(studyDTO.getTitle())
+//                .content(studyDTO.getContent())
+//                .regTime(LocalDateTime.now())
+//                .goalTime(LocalDateTime.now())
+//                .cnt(0)
+//                .writer(user.getName())
+//                .build();
+//        Study rst = studyRepository.save(study);
+//        log.warn(rst.toString());
+//        return true;
+//    }
+//    public List<Study> getStudyList() {
+//        return studyRepository.findAll();
+//    }
+//
 //    public List<StudyDTO> getStudyList(){
 //        List<StudyDTO> studyDTOS = new ArrayList<>();
 //        List<Study> studyList = studyRepository.findAll();
@@ -64,17 +64,21 @@ public class StudyService {
 //        }
 //        return studyDTOS;
 //    }
+//
+//    public StudyDTO getStudy(Long id) {
+//        StudyDTO studyDTO = new StudyDTO();
+//        Study study = studyRepository.findById(id).orElse(null);
+//        assert study != null;
+//        studyDTO.setName(study.getUser().getName());
+//        studyDTO.setTitle(study.getTitle());
+//        studyDTO.setContent(study.getContent());
+//        studyDTO.setRegTime(LocalDateTime.now());
+//
+//        return studyDTO;
+//    }
 
-    public StudyDTO getStudy(Long id) {
-        StudyDTO studyDTO = new StudyDTO();
-        Study study = studyRepository.findById(id).orElse(null);
-        assert study != null;
-        studyDTO.setName(study.getUser().getName());
-        studyDTO.setTitle(study.getTitle());
-        studyDTO.setContent(study.getContent());
-        studyDTO.setRegTime(LocalDateTime.now());
-
-        return studyDTO;
-    }
-
+//    }
 }
+
+
+

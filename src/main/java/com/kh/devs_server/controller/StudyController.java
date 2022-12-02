@@ -17,35 +17,35 @@ import java.util.Map;
 @RequestMapping("/studies")
 @RequiredArgsConstructor
 public class StudyController {
-    private final StudyService studyService;
-    private final StudyRepository studyRepository;
-
-    @GetMapping("")
-    public ResponseEntity<List<Study>> studyList(){
-        List<Study> list = studyService.getStudyList();
-        return new ResponseEntity<>(list, HttpStatus.OK);
-    }
-
-    @GetMapping("/{studyId}")
-    public ResponseEntity<StudyDTO> study(@PathVariable Long studyId) {
-        StudyDTO studyDTO = studyService.getStudy(studyId);
-        return new ResponseEntity(studyDTO, HttpStatus.OK);
-    }
-
-    @PostMapping("/{userId}")
-    public ResponseEntity<StudyDTO> writeStudy(@PathVariable Long userId, @RequestBody StudyDTO studyDTO) {
-        //로그인 파트에서 세션으로 주면 받아올 예정
-        boolean result = studyService.writeStudy(userId, studyDTO);
-
-        if(result){
-            return new ResponseEntity(true, HttpStatus.OK);
-        }
-        else {
-            return new ResponseEntity(false, HttpStatus.BAD_REQUEST);
-        }
-    }
-    @DeleteMapping("/{studyId}")
-    public void deleteStudy(@PathVariable Long studyId) {
-        studyRepository.deleteById(studyId);
-    }
+//    private final StudyService studyService;
+//    private final StudyRepository studyRepository;
+//
+//    @GetMapping("")
+//    public ResponseEntity<List<Study>> studyList(){
+//        List<Study> list = studyService.getStudyList();
+//        return new ResponseEntity<>(list, HttpStatus.OK);
+//    }
+//
+//    @GetMapping("/{studyId}")
+//    public ResponseEntity<StudyDTO> study(@PathVariable Long studyId) {
+//        StudyDTO studyDTO = studyService.getStudy(studyId);
+//        return new ResponseEntity(studyDTO, HttpStatus.OK);
+//    }
+//
+//    @PostMapping("/{userId}")
+//    public ResponseEntity<StudyDTO> writeStudy(@PathVariable Long userId, @RequestBody StudyDTO studyDTO) {
+//        //로그인 파트에서 세션으로 주면 받아올 예정
+//        boolean result = studyService.writeStudy(userId, studyDTO);
+//
+//        if(result){
+//            return new ResponseEntity(true, HttpStatus.OK);
+//        }
+//        else {
+//            return new ResponseEntity(false, HttpStatus.BAD_REQUEST);
+//        }
+//    }
+//    @DeleteMapping("/{studyId}")
+//    public void deleteStudy(@PathVariable Long studyId) {
+//        studyRepository.deleteById(studyId);
+//    }
 }
