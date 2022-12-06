@@ -1,6 +1,7 @@
 package com.kh.devs_server.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -15,9 +16,9 @@ public class Social {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long socialId;              // 게시글 id
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-    @Column(name = "user_id")
-    private String user;            // 작성자 id
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+    private User user;            // 작성자 id
 
     @Column(name = "social_title", nullable = false)
     private String title;           // 게시글 제목
@@ -40,8 +41,6 @@ public class Social {
     @Column(name = "social_saved")
     private int saved;              // 저장 횟수
 
-    @OneToMany(mappedBy = "social")
-//    @JsonIgnoreProperties({"social"})
-    @OrderBy("id desc")
-    List<Comment> commentList = new ArrayList<>();
+    @OneToMany(mappedBy="social", cascade = CascadeType.ALL)
+    private List<Comment> commentList = new ArrayList<>();
 }

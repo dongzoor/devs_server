@@ -1,30 +1,68 @@
 package com.kh.devs_server.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kh.devs_server.dao.CommentRepository;
 import com.kh.devs_server.dao.SocialRepository;
+import com.kh.devs_server.dao.UserRepository;
 import com.kh.devs_server.dto.CommentDTO;
 import com.kh.devs_server.entity.Comment;
 import com.kh.devs_server.entity.Social;
+import com.kh.devs_server.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
 @Service
 public class CommentService {
+    @Autowired
     private final CommentRepository commentRepository;
+    @Autowired
     private final SocialRepository socialRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
     // 댓글 전체조회
-    public CommentDTO getCommentList(Long socialId) {
-        Comment comment = commentRepository.findBySocialId(socialId); // 레파지토리에 정보 요청해서 해당 DB정보가 그대로 Entity에 들어옴
-        CommentDTO commentDTOS = new CommentDTO();
-        commentDTOS.setId(comment.getId());
-        commentDTOS.setUser(comment.getUser());
-        commentDTOS.setContent(comment.getContent());
-        commentDTOS.setPostDate(comment.getPostDate());
-        commentDTOS.setSocialId(comment.getSocialId());
-        return commentDTOS;
+    public List<CommentDTO> getCommentList(Long socialId) {
+        List<CommentDTO> dtoList = new ArrayList<>();
+        Social social = socialRepository.findById(socialId).get();
+        for(Comment comment : social.getCommentList()) {
+            CommentDTO commentDTOS = new CommentDTO();
+            commentDTOS.setId(comment.getId());
+            commentDTOS.setUser(comment.getUser());
+            commentDTOS.setContent(comment.getContent());
+            commentDTOS.setPostDate(comment.getPostDate());
+            commentDTOS.setSocialId(comment.getSocial());
+            dtoList.add(commentDTOS);
+        }
+        return dtoList;
+    }
+
+    public CommentDTO setComment(Map<String, String> reqData) {
+        Comment comment = Comment.builder()
+                .id(Long.valueOf(reqData.get("commentId")))
+                .social(socialRepository.findById(Long.valueOf(reqData.get("socialId"))).get())
+                .user(userRepository.findById(Long.valueOf(reqData.get("userId"))).get())
+                .content(reqData.get("content"))
+                .postDate(LocalDateTime.from(new Date().toInstant()))
+                .build();
+
+        // Insert
+        commentRepository.saveAndFlush(comment);
+
+        return objectMapper.convertValue(comment, CommentDTO.class);
+
     }
 }

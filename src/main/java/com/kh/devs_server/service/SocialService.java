@@ -7,12 +7,14 @@ import com.kh.devs_server.entity.Social;
 import com.kh.devs_server.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 // Service 의 역할은 DAO(Repository)가 DB 에서 받아온 데이터를 전달받아 가공하는 것
@@ -20,7 +22,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Service
 public class SocialService {
+    @Autowired
     private final SocialRepository socialRepository;
+    @Autowired
     private final UserRepository userRepository;
 
     // Social List 전체 조회
@@ -45,7 +49,8 @@ public class SocialService {
     }
     // Social Detail Page 조회
     public SocialDTO getSocialList(Long socialId) {
-        Social social = socialRepository.findBySocialId(socialId);
+//        Social social = socialRepository.findBySocialId(socialId);
+        Social social = socialRepository.findById(socialId).get();
         SocialDTO socialDTO = new SocialDTO();
         socialDTO.setSocialId(social.getSocialId());    // 게시글 id
         socialDTO.setUser(social.getUser());            // 작성자 정보
@@ -62,28 +67,36 @@ public class SocialService {
     }
 
     // Social Write 등록
-    public boolean regSocial(String user, String title, String content, String tag, String image) { // 결과값은 성공,실패만 알려주면 되니까 boolean
-//        User user = userRepository.findByUserId(userId); // 객체로 user 정보를 다시 찾아와서 넣어주기 위함
-        Social social = new Social();
-        social.setUser(user);
-        social.setTitle(title);
-        social.setTag(tag);
-        social.setContent(content);
-        social.setImage(image);
-        social.setPostDate(LocalDateTime.now());  // 게시일 정보는 자동 기입
-        Social rst = socialRepository.save(social);
-        log.warn(rst.toString()); // 터미널 창에 찍으려구
-        return true;
+    public boolean regSocial(Long userId, String title, String content, String tag, String image) throws Exception { // 결과값은 성공,실패만 알려주면 되니까 boolean
+        try{
+            User user = userRepository.findById(userId).get(); // 객체로 user 정보를 다시 찾아와서 넣어주기 위함
+            System.out.println("#############################");
+            System.out.println(user);
+            System.out.println("#############################");
+            Social social = new Social();
+            social.setUser(user);
+            social.setTitle(title);
+            social.setTag(tag);
+            social.setContent(content);
+            social.setImage(image);
+            social.setPostDate(LocalDateTime.now());  // 게시일 정보는 자동 기입
+            Social rst = socialRepository.save(social);
+            log.warn(rst.toString()); // 터미널 창에 찍으려구
+            return true;
+        }catch (Exception e) {
+            throw new Exception(e);
+        }
     }
 
     //삭제
     public int delSocial(Long socialId) {
-        Optional<Social> social = socialRepository.findById(socialId);
-        if (social.isPresent()) {
-            socialRepository.delete(social.get());
+        Social social = socialRepository.findById(socialId).get();
+        if (!Objects.isNull(social)) {
+            socialRepository.deleteById(social.getSocialId());
             return 1;
+        }else {
+            return 0;
         }
-        return 0;
     }
 
 }

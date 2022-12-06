@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 public class CommentDTO {
     private Long id;            // 댓글 ID
     private String content;     // 댓글 내용
-    private String user;        // 댓글 작성 USER
+    private User user;        // 댓글 작성 USER
     private LocalDateTime postDate; // 댓글 작성일
-    private Long socialId;   // social 게시글 ID
+    private Social socialId;   // social 게시글 ID
 }
