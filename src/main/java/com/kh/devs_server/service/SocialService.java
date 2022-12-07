@@ -10,12 +10,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 // Service 의 역할은 DAO(Repository)가 DB 에서 받아온 데이터를 전달받아 가공하는 것
 @Slf4j
@@ -27,7 +26,7 @@ public class SocialService {
     @Autowired
     private final UserRepository userRepository;
 
-    // Social List 전체 조회
+    // Social 전체 조회
     public List<SocialDTO> getSocialList() {
         List<SocialDTO> socialDTOS = new ArrayList<>();
         List<Social> socialList = socialRepository.findAll(Sort.by(Sort.Direction.DESC, "postDate")); // 레파지토리에 정보 요청해서 해당 DB정보가 그대로 Entity에 들어옴
@@ -35,7 +34,7 @@ public class SocialService {
         for (Social e : socialList) {
             SocialDTO socialDTO = new SocialDTO();
             socialDTO.setSocialId(e.getSocialId());
-            socialDTO.setUser(e.getUser());
+            socialDTO.setUser(e.getUser().getUserNickname()); // 작성자 닉네임
             socialDTO.setTitle(e.getTitle());
             socialDTO.setContent(e.getContent());
             socialDTO.setTag(e.getTag());
@@ -47,13 +46,13 @@ public class SocialService {
         }
         return socialDTOS;
     }
-    // Social Detail Page 조회
+    // Social 상세 조회
     public SocialDTO getSocialList(Long socialId) {
 //        Social social = socialRepository.findBySocialId(socialId);
         Social social = socialRepository.findById(socialId).get();
         SocialDTO socialDTO = new SocialDTO();
         socialDTO.setSocialId(social.getSocialId());    // 게시글 id
-        socialDTO.setUser(social.getUser());            // 작성자 정보
+        socialDTO.setUser(social.getUser().getUserNickname());   // 작성자 닉네임
         socialDTO.setTitle(social.getTitle());
         socialDTO.setContent(social.getContent());
         socialDTO.setTag(social.getTag());
@@ -65,7 +64,6 @@ public class SocialService {
         System.out.println(socialDTO);
         return socialDTO;
     }
-
     // Social Write 등록
     public boolean regSocial(Long userId, String title, String content, String tag, String image) throws Exception { // 결과값은 성공,실패만 알려주면 되니까 boolean
         try{
@@ -79,7 +77,7 @@ public class SocialService {
             social.setTag(tag);
             social.setContent(content);
             social.setImage(image);
-            social.setPostDate(LocalDateTime.now());  // 게시일 정보는 자동 기입
+            social.setPostDate(LocalDateTime.now());  // 게시일 정보 자동 기입
             Social rst = socialRepository.save(social);
             log.warn(rst.toString()); // 터미널 창에 찍으려구
             return true;
@@ -87,8 +85,20 @@ public class SocialService {
             throw new Exception(e);
         }
     }
-
-    //삭제
+    @Transactional  // 수정
+    public boolean updateSocial(Long socialId,String title, String content, String tag, String image) {
+        Social social = socialRepository.findById(socialId)
+                .orElseThrow(()->{
+                    return new IllegalArgumentException("글 찾기 실패: 아이디를 찾을 수 없습니다.");
+        });
+        social.setTitle(title);
+        social.setTag(tag);
+        social.setContent(content);
+        social.setImage(image);
+        social.setUpDate(LocalDateTime.now());  // 수정일 정보 자동 기입
+        return true;
+    }
+    @Transactional // 삭제
     public int delSocial(Long socialId) {
         Social social = socialRepository.findById(socialId).get();
         if (!Objects.isNull(social)) {

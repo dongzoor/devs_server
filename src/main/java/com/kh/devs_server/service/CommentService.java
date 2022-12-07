@@ -34,7 +34,7 @@ public class CommentService {
     @Autowired
     private ObjectMapper objectMapper;
 
-    // 댓글 전체조회
+    // 댓글 조회
     public List<CommentDTO> getCommentList(Long socialId) {
         List<CommentDTO> dtoList = new ArrayList<>();
         Social social = socialRepository.findById(socialId).get();
@@ -49,7 +49,7 @@ public class CommentService {
         }
         return dtoList;
     }
-
+    // 댓글 입력
     public CommentDTO setComment(Map<String, String> reqData) {
         Comment comment = Comment.builder()
                 .id(Long.valueOf(reqData.get("commentId")))
@@ -58,10 +58,8 @@ public class CommentService {
                 .content(reqData.get("content"))
                 .postDate(LocalDateTime.from(new Date().toInstant()))
                 .build();
-
         // Insert
         commentRepository.saveAndFlush(comment);
-
         return objectMapper.convertValue(comment, CommentDTO.class);
 
     }

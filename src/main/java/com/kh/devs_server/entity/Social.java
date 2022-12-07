@@ -2,6 +2,10 @@ package com.kh.devs_server.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.Data;
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -27,9 +31,13 @@ public class Social {
     @Column(name = "social_image")
     private String image;           // 첨부 이미지
     @Column(name = "social_tag")
-    private String tag;             // 해시태그
+    private String tag;
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)// 해시태그
     @Column(name = "social_create")
     private LocalDateTime postDate; // 작성 일자
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @Column(name = "social_update")
     private LocalDateTime upDate;   // 수정 일자
     @Column(name = "social_like")

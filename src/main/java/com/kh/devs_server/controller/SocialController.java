@@ -1,7 +1,6 @@
 package com.kh.devs_server.controller;
 
 import com.kh.devs_server.dto.SocialDTO;
-import com.kh.devs_server.entity.User;
 import com.kh.devs_server.service.SocialService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +17,7 @@ import java.util.Map;
 @RequestMapping("/social")
 public class SocialController {
     @Autowired
-    private SocialService socialService; // Controller 는 넘어온 요청을 처리하기 위해 Service 를 호출한다.
+    private final SocialService socialService; // Controller 는 넘어온 요청을 처리하기 위해 Service 를 호출한다.
 
     // social 전체 목록 조회
     @GetMapping
@@ -44,7 +43,23 @@ public class SocialController {
         String image = regData.get("image");
         boolean result = socialService.regSocial(userid, title, content, tag, image);
         if (result) {
-            return new ResponseEntity<>(true, HttpStatus.OK);
+            return new ResponseEntity<>(true, HttpStatus.OK);  // 프론트의 res.data 값(true)으로 넘어온다!!!
+        } else {
+            return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    // social 수정
+    @PutMapping("/{Id}/update")
+    public ResponseEntity<Boolean> socialUpdate(@PathVariable("Id") long pathSocialId, @RequestBody Map<String, String> editData) throws Exception {
+        Long socialId = pathSocialId;
+        String title = editData.get("title");
+        String content = editData.get("content");
+        String tag = editData.get("tag");
+        String image = editData.get("image");
+        boolean result = socialService.updateSocial(socialId, title, content, tag, image);
+        if (result) {
+            return new ResponseEntity<>(true, HttpStatus.OK);  // 프론트의 res.data 값(true)으로 넘어온다!!!
         } else {
             return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
         }
@@ -55,7 +70,7 @@ public class SocialController {
     public Map<String, Object> delete(@PathVariable("Id") long Id) {
         Map<String, Object> response = new HashMap<>();
         if (socialService.delSocial(Id) > 0) {
-            response.put("result", "SUCCESS");
+            response.put("result", "SUCCESS"); // front 의 res.data.result === "SUCCESS" 와 연결된당!!!
         } else {
             response.put("result", "FAIL");
             response.put("reason", "일치하는 게시글 정보가 없습니다.");
