@@ -2,6 +2,7 @@ package com.kh.devs_server.service;
 
 import com.kh.devs_server.constant.UserRole;
 import com.kh.devs_server.dao.UserRepository;
+import com.kh.devs_server.entity.Study;
 import com.kh.devs_server.entity.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -61,5 +62,10 @@ public class UserService {
         userDb.setModifyDate(LocalDateTime.now());
         userRepository.save(userDb);
         return user.getUserEmail();
+    }
+
+   //유저 전체조회
+    public List<User> getUserList() {
+        return userRepository.findAll();
     }
 }

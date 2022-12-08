@@ -4,6 +4,7 @@ import com.kh.devs_server.dao.SocialRepository;
 import com.kh.devs_server.dao.UserRepository;
 import com.kh.devs_server.dto.SocialDTO;
 import com.kh.devs_server.entity.Social;
+import com.kh.devs_server.entity.Study;
 import com.kh.devs_server.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -107,6 +108,10 @@ public class SocialService {
         }else {
             return 0;
         }
+    }
+
+    public List<Social> getAdSocialList() {
+        return socialRepository.findAll();
     }
 
 }
