@@ -9,6 +9,7 @@ import com.kh.devs_server.exception.NotFoundStudyException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -41,6 +42,12 @@ public class StudyService {
     public Optional<Study> getStudy(Long id) {
         Study study = studyRepository.findById(id).orElseThrow(() -> new NotFoundStudyException("study is not Found!"));
         return Optional.ofNullable(study);
+    }
+
+    @Transactional
+    public String deleteAdStudy(Long studyId) {
+        studyRepository.deleteById(studyId); // 오류가 터지면 익센셥 타서 신경 노노
+        return "OK";
     }
 
 //    public List<StudyDTO> getStudyList(){

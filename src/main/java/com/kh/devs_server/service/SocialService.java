@@ -109,9 +109,16 @@ public class SocialService {
             return 0;
         }
     }
-
-    public List<Social> getAdSocialList() {
-        return socialRepository.findAll();
+//    @Transactional
+//    public List<Social> getAdSocialList() {
+//        return socialRepository.findAll();
+//    }
+//
+    @Transactional
+    public String deleteSocial(Long socialId) {
+        socialRepository.deleteById(socialId); // 오류가 터지면 익센셥 타서 신경 노노
+        return "ok";
     }
+
 
 }

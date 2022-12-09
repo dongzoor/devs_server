@@ -1,5 +1,9 @@
 package com.kh.devs_server.entity;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.kh.devs_server.constant.UserRole;
 import lombok.Getter;
 import lombok.Setter;
@@ -36,9 +40,11 @@ public class Admin {
     @Column(name = "userRole")
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
-
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime createDate;
-
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime modifyDate;
 }
 

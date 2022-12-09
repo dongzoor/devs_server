@@ -1,5 +1,6 @@
 package com.kh.devs_server.dao;
 
+import com.kh.devs_server.entity.Admin;
 import com.kh.devs_server.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -13,10 +14,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findByUserEmail(String userEmail);
 
     List<User> findByUserEmailAndPassword(String userEmail, String password);
-    User findByUserId(String UserId);
+
+//    User findByUserId(String UserId);
 
     List<User> findAll();
 
-
+    List<User> findByUserId(Long userId);
 }
 
