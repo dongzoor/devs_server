@@ -10,8 +10,8 @@ import com.kh.devs_server.exception.NotFoundStudyException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -54,6 +54,12 @@ public class StudyService {
         study.setImgUrl(studyDTO.getImgUrl());
         study.setUpdateTime(LocalDateTime.now());
     }
+
+    public String deleteAdStudy(Long studyId) {
+        studyRepository.deleteById(studyId); // 오류가 터지면 익센셥 타서 신경 노노
+        return "OK";
+    }
+
 //    public List<StudyDTO> getStudyList(){
 //        List<StudyDTO> studyDTOS = new ArrayList<>();
 //        List<Study> studyList = studyRepository.findAll();
