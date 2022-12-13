@@ -40,6 +40,7 @@ public class SocialService {
             socialDTO.setContent(e.getContent());
             socialDTO.setTag(e.getTag());
             socialDTO.setPostDate(e.getPostDate());
+            socialDTO.setImage(e.getImage());
             socialDTO.setLike(e.getLike());
             socialDTO.setComment(e.getComment());
             socialDTO.setView(e.getView());
@@ -58,6 +59,7 @@ public class SocialService {
         socialDTO.setContent(social.getContent());
         socialDTO.setTag(social.getTag());
         socialDTO.setLike(social.getLike());
+        socialDTO.setImage(social.getImage());
         socialDTO.setView(social.getView());
         socialDTO.setComment(social.getComment());
         socialDTO.setPostDate(social.getPostDate());
