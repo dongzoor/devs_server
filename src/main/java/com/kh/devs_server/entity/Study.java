@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@Entity @Table(name = "study") @Getter @NoArgsConstructor( access = AccessLevel.PROTECTED)
+@Entity @Table(name = "study") @Getter @Setter @NoArgsConstructor( access = AccessLevel.PROTECTED)
 public class Study {
 
     @Id
@@ -42,7 +42,7 @@ public class Study {
     private User user;
 
     @OneToMany(mappedBy = "study", fetch = FetchType.LAZY)
-    private Set<HashtagCart> hashtagCartSet = new HashSet<>();
+    private Set<Hashtag> hashtagSet = new HashSet<>();
 //
 //    public void createdByUser(User user) {
 //        this.user = user;

@@ -1,5 +1,6 @@
 package com.kh.devs_server.controller;
 import com.kh.devs_server.dao.StudyRepository;
+import com.kh.devs_server.dto.HashtagDTO;
 import com.kh.devs_server.dto.StudyDTO;
 import com.kh.devs_server.entity.Study;
 import com.kh.devs_server.service.StudyService;
@@ -8,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -37,6 +39,7 @@ public class StudyController {
     public ResponseEntity<StudyDTO> writeStudy(@RequestBody StudyDTO studyDTO) {
 //        로그인 파트에서 세션으로 주면 받아올 예정
         boolean result = studyService.writeStudy(studyDTO);
+//        if(studyService.writeStudy(studyDTO) && )
 
         if(result){
             return new ResponseEntity(true, HttpStatus.OK);
@@ -46,6 +49,22 @@ public class StudyController {
         }
 
     }
+
+    @PutMapping("/study/edit/{studyId}")
+    public void updateStudy(@PathVariable Long studyId, @RequestBody StudyDTO studyDTO) {
+//        로그인 파트에서 세션으로 주면 받아올 예정
+        studyService.updateStudy(studyId, studyDTO);
+
+//        return "redirect:/study/" + studyId;
+    }
+
+    @GetMapping("/study/edit/{studyId}")
+    public ResponseEntity<Study> getUpdateStudy(@PathVariable Long studyId) {
+        Optional<Study> study = studyService.getStudy(studyId);
+        return new ResponseEntity(study, HttpStatus.OK);
+    }
+
+
     @DeleteMapping("study/{studyId}")
     public void deleteStudy(@PathVariable Long studyId) {
         studyRepository.deleteById(studyId);

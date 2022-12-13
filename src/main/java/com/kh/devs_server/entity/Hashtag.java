@@ -21,6 +21,7 @@ public class Hashtag {
     @Column(nullable = false, unique = true)
     private String tag;
 
-    @OneToMany(mappedBy = "hashtag", fetch = FetchType.LAZY)
-    private Set<HashtagCart> hashtagCartSet = new HashSet<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "study_id")
+    private Study study;
 }

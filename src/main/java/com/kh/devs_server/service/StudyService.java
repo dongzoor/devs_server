@@ -2,6 +2,7 @@ package com.kh.devs_server.service;
 
 import com.kh.devs_server.dao.StudyRepository;
 import com.kh.devs_server.dao.UserRepository;
+import com.kh.devs_server.dto.HashtagDTO;
 import com.kh.devs_server.dto.StudyDTO;
 import com.kh.devs_server.entity.Study;
 import com.kh.devs_server.entity.User;
@@ -10,9 +11,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @Slf4j
@@ -43,6 +46,14 @@ public class StudyService {
         return Optional.ofNullable(study);
     }
 
+    @Transactional
+    public void updateStudy(Long id, StudyDTO studyDTO) {
+        Study study = studyRepository.findById(id).orElseThrow(() -> new NotFoundStudyException("study is not Found!"));;
+        if(!studyDTO.getTitle().equals("")) study.setTitle(studyDTO.getTitle()); // 제목이 바뀐 경우
+        if(!studyDTO.getContent().equals("")) study.setContent(studyDTO.getContent()); // 내용이 바뀐 경우
+        study.setImgUrl(studyDTO.getImgUrl());
+        study.setUpdateTime(LocalDateTime.now());
+    }
 //    public List<StudyDTO> getStudyList(){
 //        List<StudyDTO> studyDTOS = new ArrayList<>();
 //        List<Study> studyList = studyRepository.findAll();
